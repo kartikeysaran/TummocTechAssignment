@@ -36,6 +36,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +65,6 @@ fun CartScreen(
     val cartItemsState by mainViewModel.cartItems.observeAsState(emptyList())
     cartItems.clear()
     cartItems.addAll(cartItemsState)
-
 //    val cartItems by mainViewModel.cartItems.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {
@@ -106,8 +106,7 @@ fun CartScreen(
                     CartItemRow(
                         cartItem = cartItem,
                         onRemoveItemClick = { itemId, quantity, index ->
-                            print("Quantity : ${quantity}")
-                            if(quantity == 1) {
+                            if(quantity == 0) {
                                 cartItems.removeAt(index)
                             }
                             onRemoveItemClick(itemId)
@@ -180,9 +179,12 @@ fun CartItemRow(
                 contentDescription = "Item Image",
                 modifier = Modifier
                     .height(100.dp)
-                    .width(100.dp)
+                    .width(50.dp)
             )
-            Column(Modifier.weight(1f)) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .padding(start = 10.dp)) {
                 Text(
                     text = cartItem.name,
                     style = MaterialTheme.typography.titleSmall
@@ -205,8 +207,8 @@ fun CartItemRow(
                     ) {
                         IconButton(
                             onClick = {
-                                --quantity.value
-                                onRemoveItemClick(cartItem.id, cartItem.quantity, index)
+                                quantity.value--
+                                onRemoveItemClick(cartItem.id, quantity.value, index)
                             },
                             modifier = Modifier
                                 .background(color = Color(0xffFC7100))
@@ -233,8 +235,8 @@ fun CartItemRow(
                     ) {
                         IconButton(
                             onClick = {
-                                ++quantity.value
-                                onAddItemClick(cartItem.id, cartItem.quantity, index)
+                                quantity.value++
+                                onAddItemClick(cartItem.id, quantity.value, index)
                             },
                             modifier = Modifier
                                 .background(color = Color(0xffFC7100))

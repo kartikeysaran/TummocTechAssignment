@@ -51,16 +51,11 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
-    fun updateCount(){
+    fun fetchCartItems() {
         viewModelScope.launch {
-            _cartCount.value = repository.getCartCount()
-            _favCount.value = repository.getFavCount()
+            val cartItems = repository.getCartItems()
+            _cartItems.postValue(cartItems)
         }
-    }
-
-    suspend fun fetchCartItems() {
-        val cartItems = repository.getCartItems()
-        _cartItems.postValue(cartItems)
     }
 
     fun fetchFavItems() {
@@ -73,18 +68,21 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
     fun toggleFavorite(itemId: Int) {
         viewModelScope.launch {
             repository.toggleFavorite(itemId)
+            _favCount.value = repository.getFavCount()
         }
     }
 
     fun addToCart(itemId: Int) {
         viewModelScope.launch {
             repository.addItemToCart(itemId)
+            _cartCount.value = repository.getCartCount()
         }
     }
 
     fun removeFromCart(itemId: Int) {
         viewModelScope.launch {
             repository.removeItemFromCart(itemId)
+            _cartCount.value = repository.getCartCount()
         }
     }
 

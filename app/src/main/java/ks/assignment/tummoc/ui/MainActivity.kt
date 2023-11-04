@@ -43,10 +43,8 @@ class MainActivity : ComponentActivity() {
                             navController,
                             onFavoriteClick = { itemId ->
                                 mainViewModel.toggleFavorite(itemId)
-                                mainViewModel.updateCount()
                             }, onAddToCartClick = { itemId ->
                                 mainViewModel.addToCart(itemId)
-                                mainViewModel.updateCount()
                             }, onRemoveFromCartClick = { itemId ->
 
                             },
@@ -85,7 +83,6 @@ class MainActivity : ComponentActivity() {
                                     inclusive = false
                                 )
                                 mainViewModel.fetchCategoriesWithItems()
-                                mainViewModel.updateCount()
                             })
                     }
                 }
